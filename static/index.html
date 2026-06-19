@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل توافق BMS والإنفرتر</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        .search-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 14px;
+        }
+        .form-group select, .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            align-self: flex-end;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-success:hover {
+            background: #229954;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f0f7fb;
+            border-right: 5px solid #3498db;
+            animation: fadeIn 0.5s;
+        }
+        .result-section.hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .result-header h2 {
+            color: #2c3e50;
+        }
+        .compatibility-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .status-verified {
+            background: #27ae60;
+            color: white;
+        }
+        .status-experimental {
+            background: #f39c12;
+            color: white;
+        }
+        .status-deprecated {
+            background: #e74c3c;
+            color: white;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .result-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .result-card h3 {
+            color: #7f8c8d;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .result-card p {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .result-details {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .result-details h3 {
+            color: #34495e;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .pin-diagram {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .pin-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pin-label {
+            font-weight: 600;
+            color: #34495e;
+            min-width: 70px;
+        }
+        .pin-value {
+            background: #2c3e50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        .add-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        .add-form {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .add-form.hidden {
+            display: none;
+        }
+        .add-form h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .search-section { flex-direction: column; }
+            .form-group { min-width: 100%; }
+            .btn-primary { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ دليل توافق BMS والإنفرتر</h1>
+            <p>اختر نوع الإنفرتر والبطارية لعرض تعليمات التوصيل</p>
+        </header>
+
+        <section class="search-section">
+            <div class="form-group">
+                <label for="inverter-select">🔌 اختيار الإنفرتر</label>
+                <select id="inverter-select">
+                    <option value="">-- اختر الإنفرتر --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="battery-select">🔋 اختيار البطارية</label>
+                <select id="battery-select">
+                    <option value="">-- اختر البطارية --</option>
+                </select>
+            </div>
+            <button id="search-btn" class="btn-primary">🔍 عرض التوافق</button>
+        </section>
+
+        <div id="loading" class="loading hidden">⏳ جاري التحميل...</div>
+
+        <section id="result-section" class="result-section hidden">
+            <div class="result-header">
+                <h2>✅ نتائج التوافق</h2>
+                <span class="compatibility-status status-verified" id="status-badge">متوافق</span>
+            </div>
+            <div class="result-grid">
+                <div class="result-card">
+                    <h3>📡 البروتوكول</h3>
+                    <p id="protocol">-</p>
+                </div>
+                <div class="result-card">
+                    <h3>⚡ معدل الباود</h3>
+                    <p id="baud-rate">-</p>
+                </div>
+                <div class="result-card">
+                    <h3>🔌 نوع الكابل</h3>
+                    <p id="cable-type">-</p>
+                </div>
+            </div>
+            <div class="result-details">
+                <h3>🔗 تعريفات المنافذ (PINs)</h3>
+                <div class="pin-diagram">
+                    <div class="pin-row">
+                        <span class="pin-label">CAN_H</span>
+                        <span class="pin-value" id="pin-h">-</span>
+                    </div>
+                    <div class="pin-row">
+                        <span class="pin-label">CAN_L</span>
+                        <span class="pin-value" id="pin-l">-</span>
+                    </div>
+                    <div class="pin-row">
+                        <span class="pin-label">GND</span>
+                        <span class="pin-value" id="pin-gnd">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-details">
+                <h3>📋 تعليمات الإعداد</h3>
+                <p id="setup-instructions">-</p>
+            </div>
+            <div class="result-details">
+                <h3>📝 ملاحظات إضافية</h3>
+                <p id="additional-notes">-</p>
+            </div>
+            <div class="result-details">
+                <h3>📦 إصدارات البرامج المطلوبة</h3>
+                <p><strong>الإنفرتر:</strong> <span id="inv-firmware">-</span></p>
+                <p><strong>البطارية:</strong> <span id="bat-firmware">-</span></p>
+            </div>
+        </section>
+
+        <section class="add-section">
+            <button id="add-new-btn" class="btn-secondary">➕ إضافة نوع جديد</button>
+            <div id="add-form" class="add-form hidden">
+                <h3>إضافة توافق جديد</h3>
+                <form id="new-compatibility-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الإنفرتر</label>
+                            <select id="new-inverter" required>
+                                <option value="">اختر الإنفرتر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>البطارية</label>
+                            <select id="new-battery" required>
+                                <option value="">اختر البطارية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>البروتوكول</label>
+                            <select id="new-protocol" required>
+                                <option value="CAN">CAN</option>
+                                <option value="RS485">RS485</option>
+                                <option value="ModBus">ModBus</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>معدل الباود</label>
+                            <input type="text" id="new-baud" placeholder="مثال: 500K أو 9600">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>PIN CAN_H</label>
+                            <input type="text" id="new-pin-h" placeholder="رقم PIN">
+                        </div>
+                        <div class="form-group">
+                            <label>PIN CAN_L</label>
+                            <input type="text" id="new-pin-l" placeholder="رقم PIN">
+                        </div>
+                        <div class="form-group">
+                            <label>PIN GND</label>
+                            <input type="text" id="new-pin-gnd" placeholder="رقم PIN">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>نوع الكابل</label>
+                            <select id="new-cable">
+                                <option value="Straight">مستقيم (Straight)</option>
+                                <option value="Crossover">متقاطع (Crossover)</option>
+                                <option value="Shielded">محمي (Shielded)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>إصدار برنامج الإنفرتر المطلوب</label>
+                            <input type="text" id="new-inv-firmware" placeholder="مثال: V1.05">
+                        </div>
+                        <div class="form-group">
+                            <label>إصدار برنامج البطارية المطلوب</label>
+                            <input type="text" id="new-bat-firmware" placeholder="مثال: V3.012R">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تعليمات الإعداد</label>
+                        <textarea id="new-instructions" rows="3" placeholder="أدخل تعليمات الإعداد في الإنفرتر..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ملاحظات إضافية</label>
+                        <textarea id="new-notes" rows="2" placeholder="أي ملاحظات إضافية..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-success">💾 حفظ التوافق</button>
+                </form>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let inverters = [];
+            let batteries = [];
+            let compatibility = [];
+
+            const loading = document.getElementById('loading');
+            const resultSection = document.getElementById('result-section');
+            const inverterSelect = document.getElementById('inverter-select');
+            const batterySelect = document.getElementById('battery-select');
+            const newInverterSelect = document.getElementById('new-inverter');
+            const newBatterySelect = document.getElementById('new-battery');
+
+            async function loadData() {
+                loading.classList.remove('hidden');
+                try {
+                    const response = await fetch('/api/data');
+                    const data = await response.json();
+                    inverters = data.inverters;
+                    batteries = data.batteries;
+                    compatibility = data.compatibility;
+                    populateSelects();
+                } catch (error) {
+                    console.error('خطأ في تحميل البيانات:', error);
+                    alert('❌ خطأ في تحميل البيانات. تأكد من تشغيل الخادم.');
+                } finally {
+                    loading.classList.add('hidden');
+                }
+            }
+
+            function populateSelects() {
+                inverterSelect.innerHTML = '<option value="">-- اختر الإنفرتر --</option>';
+                newInverterSelect.innerHTML = '<option value="">اختر الإنفرتر</option>';
+                batterySelect.innerHTML = '<option value="">-- اختر البطارية --</option>';
+                newBatterySelect.innerHTML = '<option value="">اختر البطارية</option>';
+
+                inverters.forEach(inv => {
+                    const text = `${inv.brand} ${inv.model}`;
+                    addOption(inverterSelect, inv.id, text);
+                    addOption(newInverterSelect, inv.id, text);
+                });
+
+                batteries.forEach(bat => {
+                    const text = `${bat.brand} ${bat.model}`;
+                    addOption(batterySelect, bat.id, text);
+                    addOption(newBatterySelect, bat.id, text);
+                });
+            }
+
+            function addOption(select, value, text) {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = text;
+                select.appendChild(option);
+            }
+
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const inverterId = inverterSelect.value;
+                const batteryId = batterySelect.value;
+
+                if (!inverterId || !batteryId) {
+                    alert('يرجى اختيار الإنفرتر والبطارية');
+                    return;
+                }
+
+                const match = compatibility.find(c => 
+                    c.inverter_id == inverterId && c.battery_id == batteryId
+                );
+
+                if (match) {
+                    displayResult(match);
+                } else {
+                    alert('❌ لم يتم العثور على توافق مسجل لهذين الجهازين. يمكنك إضافته باستخدام زر "إضافة نوع جديد"');
+                    resultSection.classList.add('hidden');
+                }
+            });
+
+            function displayResult(match) {
+                resultSection.classList.remove('hidden');
+
+                document.getElementById('protocol').textContent = match.protocol || '-';
+                document.getElementById('baud-rate').textContent = match.baud_rate || '-';
+                document.getElementById('cable-type').textContent = match.cable_type || 'غير محدد';
+                document.getElementById('pin-h').textContent = match.pin_definition_can_h || '-';
+                document.getElementById('pin-l').textContent = match.pin_definition_can_l || '-';
+                document.getElementById('pin-gnd').textContent = match.pin_definition_gnd || '-';
+                document.getElementById('setup-instructions').textContent = match.inverter_setup_instructions || 'لا توجد تعليمات إضافية';
+                document.getElementById('additional-notes').textContent = match.additional_notes || 'لا توجد ملاحظات إضافية';
+                document.getElementById('inv-firmware').textContent = match.inverter_firmware_required || 'غير محدد';
+                document.getElementById('bat-firmware').textContent = match.battery_firmware_required || 'غير محدد';
+
+                const statusBadge = document.getElementById('status-badge');
+                const status = match.compatibility_status || 'verified';
+                const statusText = {
+                    'verified': '✅ متوافق معتمد',
+                    'experimental': '⚠️ تجريبي',
+                    'deprecated': '❌ غير موصى به'
+                };
+                statusBadge.textContent = statusText[status] || status;
+                statusBadge.className = `compatibility-status status-${status}`;
+            }
+
+            document.getElementById('add-new-btn').addEventListener('click', function() {
+                document.getElementById('add-form').classList.toggle('hidden');
+            });
+
+            document.getElementById('new-compatibility-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const newData = {
+                    inverter_id: document.getElementById('new-inverter').value,
+                    battery_id: document.getElementById('new-battery').value,
+                    protocol: document.getElementById('new-protocol').value,
+                    baud_rate: document.getElementById('new-baud').value,
+                    pin_definition_can_h: document.getElementById('new-pin-h').value,
+                    pin_definition_can_l: document.getElementById('new-pin-l').value,
+                    pin_definition_gnd: document.getElementById('new-p
