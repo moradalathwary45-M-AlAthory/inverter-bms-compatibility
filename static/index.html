@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دليل توافق BMS والإنفرتر</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -18,20 +22,42 @@
             background: white;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
         }
         header {
             text-align: center;
             margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
         }
-        header h1 {
+        .profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #3498db;
+            object-fit: cover;
+        }
+        .profile-info h1 {
             color: #2c3e50;
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 26px;
+            margin-bottom: 5px;
         }
-        header p {
+        .profile-info .subtitle {
             color: #7f8c8d;
+            font-size: 14px;
+        }
+        .profile-info .contact {
+            color: #2c3e50;
             font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
         }
         .search-section {
             display: flex;
@@ -53,7 +79,9 @@
             color: #34495e;
             font-size: 14px;
         }
-        .form-group select, .form-group input, .form-group textarea {
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 2px solid #e0e0e0;
@@ -61,7 +89,9 @@
             font-size: 14px;
             transition: border-color 0.3s;
         }
-        .form-group select:focus, .form-group input:focus, .form-group textarea:focus {
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
             border-color: #3498db;
             outline: none;
         }
@@ -119,8 +149,14 @@
             display: none;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .result-header {
             display: flex;
@@ -161,7 +197,7 @@
             background: white;
             padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         .result-card h3 {
             color: #7f8c8d;
@@ -238,19 +274,48 @@
             padding: 20px;
             color: #7f8c8d;
         }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
         @media (max-width: 600px) {
-            .container { padding: 15px; }
-            .search-section { flex-direction: column; }
-            .form-group { min-width: 100%; }
-            .btn-primary { width: 100%; }
+            .container {
+                padding: 15px;
+            }
+            .search-section {
+                flex-direction: column;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+            .btn-primary {
+                width: 100%;
+            }
+            .profile {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>⚡ دليل توافق BMS والإنفرتر</h1>
-            <p>اختر نوع الإنفرتر والبطارية لعرض تعليمات التوصيل</p>
+            <div class="profile">
+                <img src="https://ui-avatars.com/api/?name=مراد+الاثوري&size=100&background=3498db&color=fff&font-size=0.5&bold=true&rounded=true" 
+                     alt="المهندس مراد الاثوري" 
+                     class="profile-img">
+                <div class="profile-info">
+                    <h1>⚡ دليل توافق BMS والإنفرتر</h1>
+                    <p class="subtitle">المهندس مراد الاثوري</p>
+                    <p class="contact">📱 775066061</p>
+                </div>
+            </div>
+            <p style="margin-top:10px; color:#7f8c8d;">اختر نوع الإنفرتر والبطارية لعرض تعليمات التوصيل</p>
         </header>
 
         <section class="search-section">
@@ -399,6 +464,11 @@
                 </form>
             </div>
         </section>
+
+        <footer>
+            <p>© 2026 المهندس مراد الاثوري - جميع الحقوق محفوظة</p>
+            <p style="font-size:12px; color:#aaa;">📱 775066061</p>
+        </footer>
     </div>
 
     <script>
@@ -466,7 +536,7 @@
                     return;
                 }
 
-                const match = compatibility.find(c => 
+                const match = compatibility.find(c =>
                     c.inverter_id == inverterId && c.battery_id == batteryId
                 );
 
@@ -487,34 +557,4 @@
                 document.getElementById('pin-h').textContent = match.pin_definition_can_h || '-';
                 document.getElementById('pin-l').textContent = match.pin_definition_can_l || '-';
                 document.getElementById('pin-gnd').textContent = match.pin_definition_gnd || '-';
-                document.getElementById('setup-instructions').textContent = match.inverter_setup_instructions || 'لا توجد تعليمات إضافية';
-                document.getElementById('additional-notes').textContent = match.additional_notes || 'لا توجد ملاحظات إضافية';
-                document.getElementById('inv-firmware').textContent = match.inverter_firmware_required || 'غير محدد';
-                document.getElementById('bat-firmware').textContent = match.battery_firmware_required || 'غير محدد';
-
-                const statusBadge = document.getElementById('status-badge');
-                const status = match.compatibility_status || 'verified';
-                const statusText = {
-                    'verified': '✅ متوافق معتمد',
-                    'experimental': '⚠️ تجريبي',
-                    'deprecated': '❌ غير موصى به'
-                };
-                statusBadge.textContent = statusText[status] || status;
-                statusBadge.className = `compatibility-status status-${status}`;
-            }
-
-            document.getElementById('add-new-btn').addEventListener('click', function() {
-                document.getElementById('add-form').classList.toggle('hidden');
-            });
-
-            document.getElementById('new-compatibility-form').addEventListener('submit', async function(e) {
-                e.preventDefault();
-
-                const newData = {
-                    inverter_id: document.getElementById('new-inverter').value,
-                    battery_id: document.getElementById('new-battery').value,
-                    protocol: document.getElementById('new-protocol').value,
-                    baud_rate: document.getElementById('new-baud').value,
-                    pin_definition_can_h: document.getElementById('new-pin-h').value,
-                    pin_definition_can_l: document.getElementById('new-pin-l').value,
-                    pin_definition_gnd: document.getElementById('new-p
+                doc
