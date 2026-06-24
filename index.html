@@ -80,15 +80,18 @@
             font-size: 14px;
         }
         .form-group select,
-        .form-group input {
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 10px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
+            transition: border-color 0.3s;
         }
         .form-group select:focus,
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group textarea:focus {
             border-color: #3498db;
             outline: none;
         }
@@ -106,6 +109,47 @@
         }
         .btn-primary:hover {
             background: #2980b9;
+        }
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-success:hover {
+            background: #229954;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
         }
         .result-section {
             margin-top: 20px;
@@ -147,6 +191,14 @@
         }
         .status-verified {
             background: #27ae60;
+            color: white;
+        }
+        .status-experimental {
+            background: #f39c12;
+            color: white;
+        }
+        .status-deprecated {
+            background: #e74c3c;
             color: white;
         }
         .result-grid {
@@ -221,6 +273,16 @@
         .add-form.hidden {
             display: none;
         }
+        .add-form h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
         footer {
             text-align: center;
             margin-top: 30px;
@@ -228,6 +290,105 @@
             border-top: 2px solid #eee;
             color: #7f8c8d;
             font-size: 14px;
+        }
+        .device-list {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .device-item:last-child {
+            border-bottom: none;
+        }
+        .device-item .info {
+            font-size: 14px;
+            color: #2c3e50;
+        }
+        .device-item .info strong {
+            color: #34495e;
+        }
+        .device-item .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .device-item .actions button {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            color: white;
+        }
+        .btn-edit {
+            background: #f39c12;
+        }
+        .btn-delete {
+            background: #e74c3c;
+        }
+        .btn-edit:hover {
+            background: #d68910;
+        }
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+        .badge-status {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-verified {
+            background: #27ae60;
+            color: white;
+        }
+        .badge-experimental {
+            background: #f39c12;
+            color: white;
+        }
+        .badge-deprecated {
+            background: #e74c3c;
+            color: white;
+        }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 8px 20px;
+            border: 2px solid #3498db;
+            background: transparent;
+            color: #3498db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        .tab-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
         @media (max-width: 600px) {
             .container {
@@ -246,6 +407,15 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            .device-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .device-item .actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
         }
     </style>
 </head>
@@ -263,72 +433,178 @@
             <p style="margin-top:10px; color:#7f8c8d;">اختر نوع الإنفرتر والبطارية لعرض تعليمات التوصيل</p>
         </header>
 
-        <section class="search-section">
-            <div class="form-group">
-                <label for="inverter-select">🔌 اختيار الإنفرتر</label>
-                <select id="inverter-select">
-                    <option value="">-- اختر الإنفرتر --</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="battery-select">🔋 اختيار البطارية</label>
-                <select id="battery-select">
-                    <option value="">-- اختر البطارية --</option>
-                </select>
-            </div>
-            <button id="search-btn" class="btn-primary">🔍 عرض التوافق</button>
-        </section>
+        <!-- أزرار التبويب -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('search')">🔍 البحث</button>
+            <button class="tab-btn" onclick="switchTab('add')">➕ إضافة توافق جديد</button>
+            <button class="tab-btn" onclick="switchTab('list')">📋 قائمة الأجهزة</button>
+        </div>
 
-        <section id="result-section" class="result-section hidden">
-            <div class="result-header">
-                <h2>✅ نتائج التوافق</h2>
-                <span class="compatibility-status status-verified" id="status-badge">متوافق</span>
-            </div>
-            <div class="result-grid">
-                <div class="result-card">
-                    <h3>📡 البروتوكول</h3>
-                    <p id="protocol">-</p>
+        <!-- تبويب البحث -->
+        <div id="tab-search" class="tab-content active">
+            <section class="search-section">
+                <div class="form-group">
+                    <label for="inverter-select">🔌 اختيار الإنفرتر</label>
+                    <select id="inverter-select">
+                        <option value="">-- اختر الإنفرتر --</option>
+                    </select>
                 </div>
-                <div class="result-card">
-                    <h3>⚡ معدل الباود</h3>
-                    <p id="baud-rate">-</p>
+                <div class="form-group">
+                    <label for="battery-select">🔋 اختيار البطارية</label>
+                    <select id="battery-select">
+                        <option value="">-- اختر البطارية --</option>
+                    </select>
                 </div>
-                <div class="result-card">
-                    <h3>🔌 نوع الكابل</h3>
-                    <p id="cable-type">-</p>
+                <button id="search-btn" class="btn-primary">🔍 عرض التوافق</button>
+            </section>
+
+            <section id="result-section" class="result-section hidden">
+                <div class="result-header">
+                    <h2>✅ نتائج التوافق</h2>
+                    <span class="compatibility-status status-verified" id="status-badge">متوافق</span>
                 </div>
-            </div>
-            <div class="result-details">
-                <h3>🔗 تعريفات المنافذ (PINs)</h3>
-                <div class="pin-diagram">
-                    <div class="pin-row">
-                        <span class="pin-label">CAN_H</span>
-                        <span class="pin-value" id="pin-h">-</span>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h3>📡 البروتوكول</h3>
+                        <p id="protocol">-</p>
                     </div>
-                    <div class="pin-row">
-                        <span class="pin-label">CAN_L</span>
-                        <span class="pin-value" id="pin-l">-</span>
+                    <div class="result-card">
+                        <h3>⚡ معدل الباود</h3>
+                        <p id="baud-rate">-</p>
                     </div>
-                    <div class="pin-row">
-                        <span class="pin-label">GND</span>
-                        <span class="pin-value" id="pin-gnd">-</span>
+                    <div class="result-card">
+                        <h3>🔌 نوع الكابل</h3>
+                        <p id="cable-type">-</p>
                     </div>
                 </div>
+                <div class="result-details">
+                    <h3>🔗 تعريفات المنافذ (PINs)</h3>
+                    <div class="pin-diagram">
+                        <div class="pin-row">
+                            <span class="pin-label">CAN_H</span>
+                            <span class="pin-value" id="pin-h">-</span>
+                        </div>
+                        <div class="pin-row">
+                            <span class="pin-label">CAN_L</span>
+                            <span class="pin-value" id="pin-l">-</span>
+                        </div>
+                        <div class="pin-row">
+                            <span class="pin-label">GND</span>
+                            <span class="pin-value" id="pin-gnd">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-details">
+                    <h3>📋 تعليمات الإعداد</h3>
+                    <p id="setup-instructions">-</p>
+                </div>
+                <div class="result-details">
+                    <h3>📝 ملاحظات إضافية</h3>
+                    <p id="additional-notes">-</p>
+                </div>
+                <div class="result-details">
+                    <h3>📦 إصدارات البرامج المطلوبة</h3>
+                    <p><strong>الإنفرتر:</strong> <span id="inv-firmware">-</span></p>
+                    <p><strong>البطارية:</strong> <span id="bat-firmware">-</span></p>
+                </div>
+            </section>
+        </div>
+
+        <!-- تبويب إضافة توافق جديد -->
+        <div id="tab-add" class="tab-content">
+            <div class="add-form" style="display:block;">
+                <h3>➕ إضافة توافق جديد</h3>
+                <form id="new-compatibility-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الإنفرتر</label>
+                            <select id="new-inverter" required>
+                                <option value="">اختر الإنفرتر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>البطارية</label>
+                            <select id="new-battery" required>
+                                <option value="">اختر البطارية</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>البروتوكول</label>
+                            <select id="new-protocol" required>
+                                <option value="CAN">CAN</option>
+                                <option value="RS485">RS485</option>
+                                <option value="ModBus">ModBus</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>معدل الباود</label>
+                            <input type="text" id="new-baud" placeholder="مثال: 500K أو 9600">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>PIN CAN_H</label>
+                            <input type="text" id="new-pin-h" placeholder="رقم PIN">
+                        </div>
+                        <div class="form-group">
+                            <label>PIN CAN_L</label>
+                            <input type="text" id="new-pin-l" placeholder="رقم PIN">
+                        </div>
+                        <div class="form-group">
+                            <label>PIN GND</label>
+                            <input type="text" id="new-pin-gnd" placeholder="رقم PIN">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>نوع الكابل</label>
+                            <select id="new-cable">
+                                <option value="Straight">مستقيم (Straight)</option>
+                                <option value="Crossover">متقاطع (Crossover)</option>
+                                <option value="Shielded">محمي (Shielded)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>إصدار برنامج الإنفرتر المطلوب</label>
+                            <input type="text" id="new-inv-firmware" placeholder="مثال: V1.05">
+                        </div>
+                        <div class="form-group">
+                            <label>إصدار برنامج البطارية المطلوب</label>
+                            <input type="text" id="new-bat-firmware" placeholder="مثال: V3.012R">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>حالة التوافق</label>
+                            <select id="new-status">
+                                <option value="verified">✅ معتمد</option>
+                                <option value="experimental">⚠️ تجريبي</option>
+                                <option value="deprecated">❌ غير موصى به</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>تعليمات الإعداد</label>
+                        <textarea id="new-instructions" rows="3" placeholder="أدخل تعليمات الإعداد في الإنفرتر..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ملاحظات إضافية</label>
+                        <textarea id="new-notes" rows="2" placeholder="أي ملاحظات إضافية..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-success">💾 حفظ التوافق</button>
+                </form>
             </div>
-            <div class="result-details">
-                <h3>📋 تعليمات الإعداد</h3>
-                <p id="setup-instructions">-</p>
+        </div>
+
+        <!-- تبويب قائمة الأجهزة -->
+        <div id="tab-list" class="tab-content">
+            <h3>📋 قائمة التوافقات المسجلة</h3>
+            <div id="device-list-container" class="device-list">
+                <p style="color:#7f8c8d; text-align:center; padding:20px;">جاري التحميل...</p>
             </div>
-            <div class="result-details">
-                <h3>📝 ملاحظات إضافية</h3>
-                <p id="additional-notes">-</p>
-            </div>
-            <div class="result-details">
-                <h3>📦 إصدارات البرامج المطلوبة</h3>
-                <p><strong>الإنفرتر:</strong> <span id="inv-firmware">-</span></p>
-                <p><strong>البطارية:</strong> <span id="bat-firmware">-</span></p>
-            </div>
-        </section>
+        </div>
 
         <footer>
             <p>© 2026 المهندس مراد الاثوري - جميع الحقوق محفوظة</p>
@@ -337,10 +613,10 @@
     </div>
 
     <script>
-        // ===== البيانات المخزنة في البرنامج نفسه (بدون خادم) =====
-        const compatibilityData = [
-            // Growatt + Pylontech
+        // ===== البيانات المخزنة =====
+        let compatibilityData = [
             {
+                id: 1,
                 inverter_brand: "Growatt",
                 inverter_model: "SPF 3000TL LVM-ES",
                 battery_brand: "Pylontech",
@@ -357,8 +633,8 @@
                 notes: "يجب استخدام كيبل شبكة مستقيم (Straight) مع تعريفات CAN على PIN 4 و5",
                 status: "verified"
             },
-            // Victron + Pylontech
             {
+                id: 2,
                 inverter_brand: "Victron",
                 inverter_model: "MultiPlus-II 48/3000/35-32",
                 battery_brand: "Pylontech",
@@ -375,8 +651,8 @@
                 notes: "Victron يستخدم PIN 7 و8 لـ CAN بينما Pylontech يستخدم 4 و5. استخدم كابل متقاطع (Crossover)",
                 status: "verified"
             },
-            // SMA + BYD
             {
+                id: 3,
                 inverter_brand: "SMA",
                 inverter_model: "Sunny Boy Storage 3.7",
                 battery_brand: "BYD",
@@ -393,8 +669,8 @@
                 notes: "يجب تحديث الإنفرتر إلى الإصدار 1.00.20.R أو أحدث",
                 status: "verified"
             },
-            // Deye + Pylontech
             {
+                id: 4,
                 inverter_brand: "Deye",
                 inverter_model: "SUN-3K-SG04LP1-EU",
                 battery_brand: "Pylontech",
@@ -413,112 +689,321 @@
             }
         ];
 
-        // ===== بناء القوائم من البيانات =====
-        const inverters = [];
-        const batteries = [];
+        let nextId = 5;
 
-        compatibilityData.forEach(item => {
-            // إضافة الإنفرتر إذا لم يكن موجود
-            const invKey = item.inverter_brand + ' ' + item.inverter_model;
-            if (!inverters.find(i => i.name === invKey)) {
-                inverters.push({
-                    id: inverters.length + 1,
-                    name: invKey,
-                    brand: item.inverter_brand,
-                    model: item.inverter_model
-                });
-            }
-            // إضافة البطارية إذا لم تكن موجودة
-            const batKey = item.battery_brand + ' ' + item.battery_model;
-            if (!batteries.find(b => b.name === batKey)) {
-                batteries.push({
-                    id: batteries.length + 1,
-                    name: batKey,
-                    brand: item.battery_brand,
-                    model: item.battery_model
-                });
-            }
-        });
+        // ===== دوال مساعدة =====
+        function getInverters() {
+            const inv = [];
+            compatibilityData.forEach(item => {
+                const key = item.inverter_brand + ' ' + item.inverter_model;
+                if (!inv.find(i => i.name === key)) {
+                    inv.push({ id: inv.length + 1, name: key, brand: item.inverter_brand, model: item.inverter_model });
+                }
+            });
+            return inv;
+        }
 
-        // ===== تهيئة الصفحة =====
-        document.addEventListener('DOMContentLoaded', function() {
+        function getBatteries() {
+            const bat = [];
+            compatibilityData.forEach(item => {
+                const key = item.battery_brand + ' ' + item.battery_model;
+                if (!bat.find(b => b.name === key)) {
+                    bat.push({ id: bat.length + 1, name: key, brand: item.battery_brand, model: item.battery_model });
+                }
+            });
+            return bat;
+        }
+
+        function populateSelects() {
             const inverterSelect = document.getElementById('inverter-select');
             const batterySelect = document.getElementById('battery-select');
-            const resultSection = document.getElementById('result-section');
+            const newInverterSelect = document.getElementById('new-inverter');
+            const newBatterySelect = document.getElementById('new-battery');
 
-            // ملء قائمة الإنفرترات
-            inverters.forEach(inv => {
-                const option = document.createElement('option');
-                option.value = inv.id;
-                option.textContent = inv.name;
-                inverterSelect.appendChild(option);
+            const inverters = getInverters();
+            const batteries = getBatteries();
+
+            [inverterSelect, newInverterSelect].forEach(sel => {
+                sel.innerHTML = '<option value="">' + (sel.id === 'inverter-select' ? '-- اختر الإنفرتر --' : 'اختر الإنفرتر') +
+                    '</option>';
+                inverters.forEach(inv => {
+                    const opt = document.createElement('option');
+                    opt.value = inv.id;
+                    opt.textContent = inv.name;
+                    sel.appendChild(opt);
+                });
             });
 
-            // ملء قائمة البطاريات
-            batteries.forEach(bat => {
-                const option = document.createElement('option');
-                option.value = bat.id;
-                option.textContent = bat.name;
-                batterySelect.appendChild(option);
+            [batterySelect, newBatterySelect].forEach(sel => {
+                sel.innerHTML = '<option value="">' + (sel.id === 'battery-select' ? '-- اختر البطارية --' : 'اختر البطارية') +
+                    '</option>';
+                batteries.forEach(bat => {
+                    const opt = document.createElement('option');
+                    opt.value = bat.id;
+                    opt.textContent = bat.name;
+                    sel.appendChild(opt);
+                });
             });
+        }
 
-            // زر البحث
-            document.getElementById('search-btn').addEventListener('click', function() {
-                const invId = parseInt(inverterSelect.value);
-                const batId = parseInt(batterySelect.value);
+        function displayResult(match) {
+            const section = document.getElementById('result-section');
+            section.classList.remove('hidden');
 
-                if (!invId || !batId) {
-                    alert('يرجى اختيار الإنفرتر والبطارية');
-                    return;
-                }
+            document.getElementById('protocol').textContent = match.protocol || '-';
+            document.getElementById('baud-rate').textContent = match.baud_rate || '-';
+            document.getElementById('cable-type').textContent = match.cable_type || 'غير محدد';
+            document.getElementById('pin-h').textContent = match.pin_h || '-';
+            document.getElementById('pin-l').textContent = match.pin_l || '-';
+            document.getElementById('pin-gnd').textContent = match.pin_gnd || '-';
+            document.getElementById('setup-instructions').textContent = match.setup_instructions || 'لا توجد تعليمات إضافية';
+            document.getElementById('additional-notes').textContent = match.notes || 'لا توجد ملاحظات إضافية';
+            document.getElementById('inv-firmware').textContent = match.inverter_firmware || 'غير محدد';
+            document.getElementById('bat-firmware').textContent = match.battery_firmware || 'غير محدد';
 
+            const badge = document.getElementById('status-badge');
+            const texts = { 'verified': '✅ متوافق معتمد', 'experimental': '⚠️ تجريبي', 'deprecated': '❌ غير موصى به' };
+            badge.textContent = texts[match.status] || '✅ متوافق معتمد';
+            badge.className = 'compatibility-status status-' + (match.status || 'verified');
+        }
+
+        function renderDeviceList() {
+            const container = document.getElementById('device-list-container');
+            if (compatibilityData.length === 0) {
+                container.innerHTML = '<p style="color:#7f8c8d; text-align:center; padding:20px;">لا توجد توافقات مسجلة</p>';
+                return;
+            }
+            let html = '';
+            compatibilityData.forEach(item => {
+                const statusText = { 'verified': 'معتمد', 'experimental': 'تجريبي', 'deprecated': 'غير موصى به' };
+                const statusClass = { 'verified': 'badge-verified', 'experimental': 'badge-experimental',
+                    'deprecated': 'badge-deprecated' };
+                html += `
+                    <div class="device-item">
+                        <div class="info">
+                            <strong>${item.inverter_brand} ${item.inverter_model}</strong> ↔ 
+                            <strong>${item.battery_brand} ${item.battery_model}</strong>
+                            <span class="badge-status ${statusClass[item.status] || 'badge-verified'}">${statusText[item.status] || 'معتمد'}</span>
+                            <span style="font-size:12px; color:#7f8c8d; display:block; margin-top:2px;">
+                                بروتوكول: ${item.protocol} | باود: ${item.baud_rate} | PIN: ${item.pin_h}/${item.pin_l}
+                            </span>
+                        </div>
+                        <div class="actions">
+                            <button class="btn-edit" onclick="editDevice(${item.id})">✏️ تعديل</button>
+                            <button class="btn-delete" onclick="deleteDevice(${item.id})">🗑️ حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.querySelector('.tab-btn[onclick="switchTab(\'' + tab + '\')"]').classList.add('active');
+            if (tab === 'list') renderDeviceList();
+            if (tab === 'add') populateSelects();
+        }
+
+        function deleteDevice(id) {
+            if (confirm('هل أنت متأكد من حذف هذا التوافق؟')) {
+                compatibilityData = compatibilityData.filter(item => item.id !== id);
+                populateSelects();
+                renderDeviceList();
+                alert('✅ تم الحذف بنجاح!');
+            }
+        }
+
+        function editDevice(id) {
+            const item = compatibilityData.find(d => d.id === id);
+            if (!item) return;
+            // ملء النموذج بالبيانات
+            document.getElementById('new-inverter').value = getInverters().find(i =>
+                i.brand === item.inverter_brand && i.model === item.inverter_model
+            )?.id || '';
+            document.getElementById('new-battery').value = getBatteries().find(b =>
+                b.brand === item.battery_brand && b.model === item.battery_model
+            )?.id || '';
+            document.getElementById('new-protocol').value = item.protocol || 'CAN';
+            document.getElementById('new-baud').value = item.baud_rate || '';
+            document.getElementById('new-pin-h').value = item.pin_h || '';
+            document.getElementById('new-pin-l').value = item.pin_l || '';
+            document.getElementById('new-pin-gnd').value = item.pin_gnd || '';
+            document.getElementById('new-cable').value = item.cable_type || 'Straight';
+            document.getElementById('new-inv-firmware').value = item.inverter_firmware || '';
+            document.getElementById('new-bat-firmware').value = item.battery_firmware || '';
+            document.getElementById('new-status').value = item.status || 'verified';
+            document.getElementById('new-instructions').value = item.setup_instructions || '';
+            document.getElementById('new-notes').value = item.notes || '';
+
+            // تغيير زر الحفظ لحذف旧的 وإضافة جديد
+            const form = document.getElementById('new-compatibility-form');
+            const oldSubmit = form.querySelector('button[type="submit"]');
+            const newBtn = document.createElement('button');
+            newBtn.type = 'submit';
+            newBtn.className = 'btn-success';
+            newBtn.textContent = '💾 تحديث التوافق';
+            oldSubmit.replaceWith(newBtn);
+
+            // تخزين ID للتحديث
+            form.dataset.editId = id;
+
+            // التبديل لتبويب الإضافة
+            switchTab('add');
+
+            // إضافة حدث التحديث
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                const editId = parseInt(this.dataset.editId);
+                const invId = parseInt(document.getElementById('new-inverter').value);
+                const batId = parseInt(document.getElementById('new-battery').value);
+                const inverters = getInverters();
+                const batteries = getBatteries();
                 const inverter = inverters.find(i => i.id === invId);
                 const battery = batteries.find(b => b.id === batId);
 
                 if (!inverter || !battery) {
-                    alert('بيانات غير صحيحة');
+                    alert('يرجى اختيار الإنفرتر والبطارية');
                     return;
                 }
 
-                const match = compatibilityData.find(item =>
-                    item.inverter_brand === inverter.brand &&
-                    item.inverter_model === inverter.model &&
-                    item.battery_brand === battery.brand &&
-                    item.battery_model === battery.model
-                );
-
-                if (match) {
-                    displayResult(match);
-                } else {
-                    alert('❌ لم يتم العثور على توافق مسجل لهذين الجهازين.');
-                    resultSection.classList.add('hidden');
-                }
-            });
-
-            function displayResult(match) {
-                resultSection.classList.remove('hidden');
-
-                document.getElementById('protocol').textContent = match.protocol || '-';
-                document.getElementById('baud-rate').textContent = match.baud_rate || '-';
-                document.getElementById('cable-type').textContent = match.cable_type || 'غير محدد';
-                document.getElementById('pin-h').textContent = match.pin_h || '-';
-                document.getElementById('pin-l').textContent = match.pin_l || '-';
-                document.getElementById('pin-gnd').textContent = match.pin_gnd || '-';
-                document.getElementById('setup-instructions').textContent = match.setup_instructions || 'لا توجد تعليمات إضافية';
-                document.getElementById('additional-notes').textContent = match.notes || 'لا توجد ملاحظات إضافية';
-                document.getElementById('inv-firmware').textContent = match.inverter_firmware || 'غير محدد';
-                document.getElementById('bat-firmware').textContent = match.battery_firmware || 'غير محدد';
-
-                const statusBadge = document.getElementById('status-badge');
-                const statusText = {
-                    'verified': '✅ متوافق معتمد',
-                    'experimental': '⚠️ تجريبي',
-                    'deprecated': '❌ غير موصى به'
+                const updatedData = {
+                    id: editId,
+                    inverter_brand: inverter.brand,
+                    inverter_model: inverter.model,
+                    battery_brand: battery.brand,
+                    battery_model: battery.model,
+                    protocol: document.getElementById('new-protocol').value,
+                    baud_rate: document.getElementById('new-baud').value,
+                    pin_h: document.getElementById('new-pin-h').value,
+                    pin_l: document.getElementById('new-pin-l').value,
+                    pin_gnd: document.getElementById('new-pin-gnd').value,
+                    cable_type: document.getElementById('new-cable').value,
+                    inverter_firmware: document.getElementById('new-inv-firmware').value,
+                    battery_firmware: document.getElementById('new-bat-firmware').value,
+                    status: document.getElementById('new-status').value,
+                    setup_instructions: document.getElementById('new-instructions').value,
+                    notes: document.getElementById('new-notes').value
                 };
-                statusBadge.textContent = statusText[match.status] || '✅ متوافق معتمد';
-                statusBadge.className = `compatibility-status status-${match.status || 'verified'}`;
+
+                const index = compatibilityData.findIndex(d => d.id === editId);
+                if (index !== -1) {
+                    compatibilityData[index] = updatedData;
+                }
+
+                // إعادة زر الحفظ الطبيعي
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = '💾 حفظ التوافق';
+                delete this.dataset.editId;
+                this.onsubmit = defaultSubmitHandler;
+
+                populateSelects();
+                renderDeviceList();
+                alert('✅ تم التحديث بنجاح!');
+                switchTab('list');
+            };
+        }
+
+        // ===== حدث البحث =====
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const invId = parseInt(document.getElementById('inverter-select').value);
+            const batId = parseInt(document.getElementById('battery-select').value);
+
+            if (!invId || !batId) {
+                alert('يرجى اختيار الإنفرتر والبطارية');
+                return;
             }
+
+            const inverters = getInverters();
+            const batteries = getBatteries();
+            const inverter = inverters.find(i => i.id === invId);
+            const battery = batteries.find(b => b.id === batId);
+
+            if (!inverter || !battery) {
+                alert('بيانات غير صحيحة');
+                return;
+            }
+
+            const match = compatibilityData.find(item =>
+                item.inverter_brand === inverter.brand &&
+                item.inverter_model === inverter.model &&
+                item.battery_brand === battery.brand &&
+                item.battery_model === battery.model
+            );
+
+            if (match) {
+                displayResult(match);
+            } else {
+                alert('❌ لم يتم العثور على توافق مسجل لهذين الجهازين. يمكنك إضافته من تبويب "إضافة توافق جديد"');
+                document.getElementById('result-section').classList.add('hidden');
+            }
+        });
+
+        // ===== حدث إضافة توافق جديد =====
+        function defaultSubmitHandler(e) {
+            e.preventDefault();
+            const invId = parseInt(document.getElementById('new-inverter').value);
+            const batId = parseInt(document.getElementById('new-battery').value);
+            const inverters = getInverters();
+            const batteries = getBatteries();
+            const inverter = inverters.find(i => i.id === invId);
+            const battery = batteries.find(b => b.id === batId);
+
+            if (!inverter || !battery) {
+                alert('يرجى اختيار الإنفرتر والبطارية');
+                return;
+            }
+
+            // التحقق من عدم التكرار
+            const exists = compatibilityData.some(item =>
+                item.inverter_brand === inverter.brand &&
+                item.inverter_model === inverter.model &&
+                item.battery_brand === battery.brand &&
+                item.battery_model === battery.model
+            );
+
+            if (exists) {
+                alert('⚠️ هذا التوافق مسجل مسبقاً!');
+                return;
+            }
+
+            const newData = {
+                id: nextId++,
+                inverter_brand: inverter.brand,
+                inverter_model: inverter.model,
+                battery_brand: battery.brand,
+                battery_model: battery.model,
+                protocol: document.getElementById('new-protocol').value,
+                baud_rate: document.getElementById('new-baud').value,
+                pin_h: document.getElementById('new-pin-h').value,
+                pin_l: document.getElementById('new-pin-l').value,
+                pin_gnd: document.getElementById('new-pin-gnd').value,
+                cable_type: document.getElementById('new-cable').value,
+                inverter_firmware: document.getElementById('new-inv-firmware').value,
+                battery_firmware: document.getElementById('new-bat-firmware').value,
+                status: document.getElementById('new-status').value,
+                setup_instructions: document.getElementById('new-instructions').value,
+                notes: document.getElementById('new-notes').value
+            };
+
+            compatibilityData.push(newData);
+            populateSelects();
+            renderDeviceList();
+            alert('✅ تم إضافة التوافق بنجاح!');
+            document.getElementById('new-compatibility-form').reset();
+            switchTab('list');
+        }
+
+        // ===== تهيئة الصفحة =====
+        document.addEventListener('DOMContentLoaded', function() {
+            populateSelects();
+            renderDeviceList();
+
+            const form = document.getElementById('new-compatibility-form');
+            form.onsubmit = defaultSubmitHandler;
         });
     </script>
 </body>
-  </html>
+</html>
