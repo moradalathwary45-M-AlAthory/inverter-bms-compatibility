@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل توافق BMS والإنفرتر</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .profile-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #3498db;
+            object-fit: cover;
+        }
+        .profile-info h1 {
+            color: #2c3e50;
+            font-size: 26px;
+            margin-bottom: 5px;
+        }
+        .profile-info .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .profile-info .contact {
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .search-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #34495e;
+            font-size: 14px;
+        }
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .form-group select:focus,
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            align-self: flex-end;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: #f0f7fb;
+            border-right: 5px solid #3498db;
+            animation: fadeIn 0.5s;
+        }
+        .result-section.hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .result-header h2 {
+            color: #2c3e50;
+        }
+        .compatibility-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .status-verified {
+            background: #27ae60;
+            color: white;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .result-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .result-card h3 {
+            color: #7f8c8d;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .result-card p {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .result-details {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .result-details h3 {
+            color: #34495e;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .pin-diagram {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .pin-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pin-label {
+            font-weight: 600;
+            color: #34495e;
+            min-width: 70px;
+        }
+        .pin-value {
+            background: #2c3e50;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        .add-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px dashed #e0e0e0;
+        }
+        .add-form {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        .add-form.hidden {
+            display: none;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .search-section {
+                flex-direction: column;
+            }
+            .form-group {
+                min-width: 100%;
+            }
+            .btn-primary {
+                width: 100%;
+            }
+            .profile {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="profile">
+                <img src="https://ui-avatars.com/api/?name=مراد+الاثوري&size=100&background=3498db&color=fff&font-size=0.5&bold=true&rounded=true" alt="المهندس مراد الاثوري" class="profile-img">
+                <div class="profile-info">
+                    <h1>⚡ دليل توافق BMS والإنفرتر</h1>
+                    <p class="subtitle">المهندس مراد الاثوري</p>
+                    <p class="contact">📱 775066061</p>
+                </div>
+            </div>
+            <p style="margin-top:10px; color:#7f8c8d;">اختر نوع الإنفرتر والبطارية لعرض تعليمات التوصيل</p>
+        </header>
+
+        <section class="search-section">
+            <div class="form-group">
+                <label for="inverter-select">🔌 اختيار الإنفرتر</label>
+                <select id="inverter-select">
+                    <option value="">-- اختر الإنفرتر --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="battery-select">🔋 اختيار البطارية</label>
+                <select id="battery-select">
+                    <option value="">-- اختر البطارية --</option>
+                </select>
+            </div>
+            <button id="search-btn" class="btn-primary">🔍 عرض التوافق</button>
+        </section>
+
+        <section id="result-section" class="result-section hidden">
+            <div class="result-header">
+                <h2>✅ نتائج التوافق</h2>
+                <span class="compatibility-status status-verified" id="status-badge">متوافق</span>
+            </div>
+            <div class="result-grid">
+                <div class="result-card">
+                    <h3>📡 البروتوكول</h3>
+                    <p id="protocol">-</p>
+                </div>
+                <div class="result-card">
+                    <h3>⚡ معدل الباود</h3>
+                    <p id="baud-rate">-</p>
+                </div>
+                <div class="result-card">
+                    <h3>🔌 نوع الكابل</h3>
+                    <p id="cable-type">-</p>
+                </div>
+            </div>
+            <div class="result-details">
+                <h3>🔗 تعريفات المنافذ (PINs)</h3>
+                <div class="pin-diagram">
+                    <div class="pin-row">
+                        <span class="pin-label">CAN_H</span>
+                        <span class="pin-value" id="pin-h">-</span>
+                    </div>
+                    <div class="pin-row">
+                        <span class="pin-label">CAN_L</span>
+                        <span class="pin-value" id="pin-l">-</span>
+                    </div>
+                    <div class="pin-row">
+                        <span class="pin-label">GND</span>
+                        <span class="pin-value" id="pin-gnd">-</span>
+                    </div>
+                </div>
+            </div>
+            <div class="result-details">
+                <h3>📋 تعليمات الإعداد</h3>
+                <p id="setup-instructions">-</p>
+            </div>
+            <div class="result-details">
+                <h3>📝 ملاحظات إضافية</h3>
+                <p id="additional-notes">-</p>
+            </div>
+            <div class="result-details">
+                <h3>📦 إصدارات البرامج المطلوبة</h3>
+                <p><strong>الإنفرتر:</strong> <span id="inv-firmware">-</span></p>
+                <p><strong>البطارية:</strong> <span id="bat-firmware">-</span></p>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2026 المهندس مراد الاثوري - جميع الحقوق محفوظة</p>
+            <p style="font-size:12px; color:#aaa;">📱 775066061</p>
+        </footer>
+    </div>
+
+    <script>
+        // ===== البيانات المخزنة في البرنامج نفسه (بدون خادم) =====
+        const compatibilityData = [
+            // Growatt + Pylontech
+            {
+                inverter_brand: "Growatt",
+                inverter_model: "SPF 3000TL LVM-ES",
+                battery_brand: "Pylontech",
+                battery_model: "US2000C",
+                protocol: "CAN",
+                baud_rate: "500K",
+                pin_h: "4",
+                pin_l: "5",
+                pin_gnd: "6",
+                cable_type: "Straight",
+                inverter_firmware: "V1.05",
+                battery_firmware: "V3.012R",
+                setup_instructions: "اضبط الإعداد: Lithium Mode = 00 (Pylontech)",
+                notes: "يجب استخدام كيبل شبكة مستقيم (Straight) مع تعريفات CAN على PIN 4 و5",
+                status: "verified"
+            },
+            // Victron + Pylontech
+            {
+                inverter_brand: "Victron",
+                inverter_model: "MultiPlus-II 48/3000/35-32",
+                battery_brand: "Pylontech",
+                battery_model: "US3000C",
+                protocol: "CAN",
+                baud_rate: "500K",
+                pin_h: "7",
+                pin_l: "8",
+                pin_gnd: "3",
+                cable_type: "Crossover",
+                inverter_firmware: "V1.08",
+                battery_firmware: "V3.012R",
+                setup_instructions: "اضبط الإعداد: Battery Type = Lithium, Protocol = Pylontech",
+                notes: "Victron يستخدم PIN 7 و8 لـ CAN بينما Pylontech يستخدم 4 و5. استخدم كابل متقاطع (Crossover)",
+                status: "verified"
+            },
+            // SMA + BYD
+            {
+                inverter_brand: "SMA",
+                inverter_model: "Sunny Boy Storage 3.7",
+                battery_brand: "BYD",
+                battery_model: "Battery-Box Premium HVS 5.1",
+                protocol: "CAN",
+                baud_rate: "500K",
+                pin_h: "4",
+                pin_l: "5",
+                pin_gnd: "6",
+                cable_type: "Straight",
+                inverter_firmware: "1.00.20.R",
+                battery_firmware: "V3.012R",
+                setup_instructions: "اضبط الإعداد: CAN Protocol = BYD",
+                notes: "يجب تحديث الإنفرتر إلى الإصدار 1.00.20.R أو أحدث",
+                status: "verified"
+            },
+            // Deye + Pylontech
+            {
+                inverter_brand: "Deye",
+                inverter_model: "SUN-3K-SG04LP1-EU",
+                battery_brand: "Pylontech",
+                battery_model: "US3000C",
+                protocol: "CAN",
+                baud_rate: "500K",
+                pin_h: "4",
+                pin_l: "5",
+                pin_gnd: "6",
+                cable_type: "Straight",
+                inverter_firmware: "V1.02",
+                battery_firmware: "V3.012R",
+                setup_instructions: "اضبط الإعداد: Battery Type = Lithium, Protocol = Pylontech CAN",
+                notes: "Deye يدعم بروتوكول Pylontech عبر CAN مباشرة",
+                status: "verified"
+            }
+        ];
+
+        // ===== بناء القوائم من البيانات =====
+        const inverters = [];
+        const batteries = [];
+
+        compatibilityData.forEach(item => {
+            // إضافة الإنفرتر إذا لم يكن موجود
+            const invKey = item.inverter_brand + ' ' + item.inverter_model;
+            if (!inverters.find(i => i.name === invKey)) {
+                inverters.push({
+                    id: inverters.length + 1,
+                    name: invKey,
+                    brand: item.inverter_brand,
+                    model: item.inverter_model
+                });
+            }
+            // إضافة البطارية إذا لم تكن موجودة
+            const batKey = item.battery_brand + ' ' + item.battery_model;
+            if (!batteries.find(b => b.name === batKey)) {
+                batteries.push({
+                    id: batteries.length + 1,
+                    name: batKey,
+                    brand: item.battery_brand,
+                    model: item.battery_model
+                });
+            }
+        });
+
+        // ===== تهيئة الصفحة =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const inverterSelect = document.getElementById('inverter-select');
+            const batterySelect = document.getElementById('battery-select');
+            const resultSection = document.getElementById('result-section');
+
+            // ملء قائمة الإنفرترات
+            inverters.forEach(inv => {
+                const option = document.createElement('option');
+                option.value = inv.id;
+                option.textContent = inv.name;
+                inverterSelect.appendChild(option);
+            });
+
+            // ملء قائمة البطاريات
+            batteries.forEach(bat => {
+                const option = document.createElement('option');
+                option.value = bat.id;
+                option.textContent = bat.name;
+                batterySelect.appendChild(option);
+            });
+
+            // زر البحث
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const invId = parseInt(inverterSelect.value);
+                const batId = parseInt(batterySelect.value);
+
+                if (!invId || !batId) {
+                    alert('يرجى اختيار الإنفرتر والبطارية');
+                    return;
+                }
+
+                const inverter = inverters.find(i => i.id === invId);
+                const battery = batteries.find(b => b.id === batId);
+
+                if (!inverter || !battery) {
+                    alert('بيانات غير صحيحة');
+                    return;
+                }
+
+                const match = compatibilityData.find(item =>
+                    item.inverter_brand === inverter.brand &&
+                    item.inverter_model === inverter.model &&
+                    item.battery_brand === battery.brand &&
+                    item.battery_model === battery.model
+                );
+
+                if (match) {
+                    displayResult(match);
+                } else {
+                    alert('❌ لم يتم العثور على توافق مسجل لهذين الجهازين.');
+                    resultSection.classList.add('hidden');
+                }
+            });
+
+            function displayResult(match) {
+                resultSection.classList.remove('hidden');
+
+                document.getElementById('protocol').textContent = match.protocol || '-';
+                document.getElementById('baud-rate').textContent = match.baud_rate || '-';
+                document.getElementById('cable-type').textContent = match.cable_type || 'غير محدد';
+                document.getElementById('pin-h').textContent = match.pin_h || '-';
+                document.getElementById('pin-l').textContent = match.pin_l || '-';
+                document.getElementById('pin-gnd').textContent = match.pin_gnd || '-';
+                document.getElementById('setup-instructions').textContent = match.setup_instructions || 'لا توجد تعليمات إضافية';
+                document.getElementById('additional-notes').textContent = match.notes || 'لا توجد ملاحظات إضافية';
+                document.getElementById('inv-firmware').textContent = match.inverter_firmware || 'غير محدد';
+                document.getElementById('bat-firmware').textContent = match.battery_firmware || 'غير محدد';
+
+                const statusBadge = document.getElementById('status-badge');
+                const statusText = {
+                    'verified': '✅ متوافق معتمد',
+                    'experimental': '⚠️ تجريبي',
+                    'deprecated': '❌ غير موصى به'
+                };
+                statusBadge.textContent = statusText[match.status] || '✅ متوافق معتمد';
+                statusBadge.className = `compatibility-status status-${match.status || 'verified'}`;
+            }
+        });
+    </script>
+</body>
+  </html>
